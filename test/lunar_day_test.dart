@@ -91,11 +91,11 @@ void main() {
     });
 
     test('test22 - 2024年正月初一农历年干支', () {
-      expect(LunarDay.fromYmd(2024, 1, 1).month.year.getSixtyCycle().getName(), '甲辰');
+      expect(LunarDay.fromYmd(2024, 1, 1).getLunarMonth().getLunarYear().getSixtyCycle().getName(), '甲辰');
     });
 
     test('test23 - 2023年12月30日农历年干支', () {
-      expect(LunarDay.fromYmd(2023, 12, 30).month.year.getSixtyCycle().getName(), '癸卯');
+      expect(LunarDay.fromYmd(2023, 12, 30).getLunarMonth().getLunarYear().getSixtyCycle().getName(), '癸卯');
     });
 
     test('test24 - 二十八宿（2020年4月13日）', () {
@@ -126,7 +126,7 @@ void main() {
 
     test('test26 - 2005年11月23日 干支月测试', () {
       LunarDay lunar = LunarDay.fromYmd(2005, 11, 23);
-      expect(lunar.month.getSixtyCycle().getName(), '戊子');
+      expect(lunar.getLunarMonth().getSixtyCycle().getName(), '戊子');
       expect(lunar.getSixtyCycleDay().getMonth().getName(), '戊子');
     });
 

@@ -1,22 +1,24 @@
-import '../abstract_tyme.dart';
 import '../culture/direction.dart';
 import '../culture/kitchen_god_steed.dart';
 import '../culture/star/nine/nine_star.dart';
 import '../culture/twenty.dart';
 import '../sixtycycle/sixty_cycle.dart';
+import '../unit/year_unit.dart';
 import 'lunar_month.dart';
 
 /// 农历年
 ///
 /// Author: 6tail
-class LunarYear extends AbstractTyme {
-  /// 年
-  final int year;
+class LunarYear extends YearUnit {
 
   /// 缓存{闰月:年}
   static final List<List<int>> _leap = _initLeap();
 
-  LunarYear(this.year) {
+  LunarYear(int year): super(year) {
+    validate(year);
+  }
+
+  static validate(int year) {
     if (year < -1 || year > 9999) {
       throw ArgumentError('illegal lunar year: $year');
     }
@@ -26,9 +28,6 @@ class LunarYear extends AbstractTyme {
   static LunarYear fromYear(int year) {
     return LunarYear(year);
   }
-
-  /// 年
-  int getYear() => year;
 
   /// 干支
   SixtyCycle getSixtyCycle() => SixtyCycle(year - 4);

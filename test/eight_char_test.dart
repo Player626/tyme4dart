@@ -183,9 +183,9 @@ void main() {
       // 童限结束(即开始起运)的公历时刻
       expect(childLimit.getEndTime().toString(), '1989年5月4日 18:24:00');
       // 童限开始(即出生)的农历年干支
-      expect(childLimit.getStartTime().getLunarHour().getLunarDay().month.year.getSixtyCycle().getName(), '癸亥');
+      expect(childLimit.getStartTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '癸亥');
       // 童限结束(即开始起运)的农历年干支
-      expect(childLimit.getEndTime().getLunarHour().getLunarDay().month.year.getSixtyCycle().getName(), '己巳');
+      expect(childLimit.getEndTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '己巳');
 
       // 第1轮大运
       DecadeFortune decadeFortune = childLimit.getStartDecadeFortune();
@@ -233,9 +233,9 @@ void main() {
       // 童限结束(即开始起运)的公历时刻
       expect(childLimit.getEndTime().toString(), '2001年2月11日 18:58:00');
       // 童限开始(即出生)的农历年干支
-      expect(childLimit.getStartTime().getLunarHour().getLunarDay().month.year.getSixtyCycle().getName(), '辛未');
+      expect(childLimit.getStartTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '辛未');
       // 童限结束(即开始起运)的农历年干支
-      expect(childLimit.getEndTime().getLunarHour().getLunarDay().month.year.getSixtyCycle().getName(), '辛巳');
+      expect(childLimit.getEndTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '辛巳');
 
       // 第1轮大运
       DecadeFortune decadeFortune = childLimit.getStartDecadeFortune();

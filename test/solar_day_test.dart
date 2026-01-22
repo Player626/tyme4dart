@@ -66,11 +66,11 @@ void main() {
     });
 
     test('test22 - 立春后农历年干支', () {
-      expect(SolarDay.fromYmd(2024, 2, 10).getLunarDay().month.year.getSixtyCycle().getName(), '甲辰');
+      expect(SolarDay.fromYmd(2024, 2, 10).getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '甲辰');
     });
 
     test('test23 - 立春前农历年干支', () {
-      expect(SolarDay.fromYmd(2024, 2, 9).getLunarDay().month.year.getSixtyCycle().getName(), '癸卯');
+      expect(SolarDay.fromYmd(2024, 2, 9).getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '癸卯');
     });
 
     test('test24 - 农历年跨度', () {

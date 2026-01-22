@@ -125,7 +125,7 @@ void main() {
     test('test29 - 2023-10-07 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 10, 7);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '辛酉');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '辛酉');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '辛酉');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '辛酉');
     });
@@ -133,7 +133,7 @@ void main() {
     test('test30 - 2023-10-08 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 10, 8);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '辛酉');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '辛酉');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
     });
@@ -141,8 +141,8 @@ void main() {
     test('test31 - 2023-10-15 农历月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 10, 15);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getName(), '九月');
-      expect(lunarDay.month.getSixtyCycle().toString(), '壬戌');
+      expect(lunarDay.getLunarMonth().getName(), '九月');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '壬戌');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
     });
@@ -150,7 +150,7 @@ void main() {
     test('test32 - 2023-11-07 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 11, 7);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '壬戌');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '壬戌');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
     });
@@ -158,7 +158,7 @@ void main() {
     test('test33 - 2023-11-08 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 11, 8);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '壬戌');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '壬戌');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '癸亥');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '癸亥');
     });
@@ -185,7 +185,7 @@ void main() {
     test('test36 - 1983-02-15 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(1983, 2, 15);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '甲寅');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '甲寅');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '甲寅');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '甲寅');
     });
@@ -193,7 +193,7 @@ void main() {
     test('test37 - 2023-10-30 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 10, 30);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '壬戌');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '壬戌');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
     });
@@ -201,7 +201,7 @@ void main() {
     test('test38 - 2023-10-19 干支月测试', () {
       SolarDay solarDay = SolarDay.fromYmd(2023, 10, 19);
       LunarDay lunarDay = solarDay.getLunarDay();
-      expect(lunarDay.month.getSixtyCycle().toString(), '壬戌');
+      expect(lunarDay.getLunarMonth().getSixtyCycle().toString(), '壬戌');
       expect(lunarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
       expect(solarDay.getSixtyCycleDay().getMonth().toString(), '壬戌');
     });
@@ -213,7 +213,7 @@ void main() {
     });
 
     test('test40 - 2018-06-26 干支月测试', () {
-      expect(LunarDay.fromYmd(2018, 6, 26).month.getSixtyCycle().toString(), '己未');
+      expect(LunarDay.fromYmd(2018, 6, 26).getLunarMonth().getSixtyCycle().toString(), '己未');
       expect(LunarDay.fromYmd(2018, 6, 26).getSixtyCycleDay().getMonth().toString(), '庚申');
     });
 

@@ -57,18 +57,18 @@ void main() {
 
       // 日干支（23点算第二天）
       expect(sixtyCycleHour.getDay().getName(), '己未');
-      expect(h.day.getSixtyCycle().getName(), '戊午');
-      expect(h.day.toString(), '农历癸卯年十一月十四');
+      expect(h.getLunarDay().getSixtyCycle().getName(), '戊午');
+      expect(h.getLunarDay().toString(), '农历癸卯年十一月十四');
 
       // 月干支
       expect(sixtyCycleHour.getMonth().getName(), '甲子');
-      expect(h.day.month.toString(), '农历癸卯年十一月');
-      expect(h.day.month.getSixtyCycle().getName(), '甲子');
+      expect(h.getLunarDay().getLunarMonth().toString(), '农历癸卯年十一月');
+      expect(h.getLunarDay().getLunarMonth().getSixtyCycle().getName(), '甲子');
 
       // 年干支
       expect(sixtyCycleHour.getYear().getName(), '癸卯');
-      expect(h.day.month.year.toString(), '农历癸卯年');
-      expect(h.day.month.year.getSixtyCycle().getName(), '癸卯');
+      expect(h.getLunarDay().getLunarMonth().getLunarYear().toString(), '农历癸卯年');
+      expect(h.getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '癸卯');
     });
 
     test('test9 - 时辰干支（6点不换日）', () {
@@ -80,18 +80,18 @@ void main() {
 
       // 日干支（6点不换日）
       expect(sixtyCycleHour.getDay().getName(), '戊午');
-      expect(h.day.getSixtyCycle().getName(), '戊午');
-      expect(h.day.toString(), '农历癸卯年十一月十四');
+      expect(h.getLunarDay().getSixtyCycle().getName(), '戊午');
+      expect(h.getLunarDay().toString(), '农历癸卯年十一月十四');
 
       // 月干支
       expect(sixtyCycleHour.getMonth().getName(), '甲子');
-      expect(h.day.month.toString(), '农历癸卯年十一月');
-      expect(h.day.month.getSixtyCycle().getName(), '甲子');
+      expect(h.getLunarDay().getLunarMonth().toString(), '农历癸卯年十一月');
+      expect(h.getLunarDay().getLunarMonth().getSixtyCycle().getName(), '甲子');
 
       // 年干支
       expect(sixtyCycleHour.getYear().getName(), '癸卯');
-      expect(h.day.month.year.toString(), '农历癸卯年');
-      expect(h.day.month.year.getSixtyCycle().getName(), '癸卯');
+      expect(h.getLunarDay().getLunarMonth().getLunarYear().toString(), '农历癸卯年');
+      expect(h.getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName(), '癸卯');
     });
 
     test('test28 - 小人遁', () {

@@ -1,58 +1,36 @@
-import '../abstract_tyme.dart';
-import '../culture/week.dart';
+import '../unit/week_unit.dart';
 import 'solar_day.dart';
 import 'solar_month.dart';
 
 /// 公历周
 ///
 /// Author: 6tail
-class SolarWeek extends AbstractTyme {
+class SolarWeek extends WeekUnit {
   static const List<String> names = ['第一周', '第二周', '第三周', '第四周', '第五周', '第六周'];
 
-  /// 公历月
-  late final SolarMonth month;
+  SolarWeek(int year, int month, int index, int start): super(year, month, index, start) {
+    validate(year, month, index, start);
+  }
 
-  /// 索引，0-5
-  final int index;
-
-  /// 起始星期
-  late final Week start;
-
-  SolarWeek(int year, int month, this.index, int start) {
-    if (index < 0 || index > 5) {
-      throw ArgumentError('illegal solar week index: $index');
-    }
-    if (start < 0 || start > 6) {
-      throw ArgumentError('illegal solar week start: $start');
-    }
+  static validate(int year, int month, int index, int start) {
+    WeekUnit.validate(index, start);
     SolarMonth m = SolarMonth(year, month);
     if (index >= m.getWeekCount(start)) {
       throw ArgumentError('illegal solar week index: $index in month: $m');
     }
-    this.month = m;
-    this.start = Week(start);
   }
 
   SolarWeek.fromYm(int year, int month, int index, int start) : this(year, month, index, start);
 
   /// 公历月
-  SolarMonth getSolarMonth() => month;
-
-  /// 年
-  int getYear() => month.getYear();
-
-  /// 月
-  int getMonth() => month.getMonth();
-
-  /// 索引，0-5
-  int getIndex() => index;
+  SolarMonth getSolarMonth() => SolarMonth(year, month);
 
   /// 位于当年的索引
   int getIndexInYear() {
     int i = 0;
     SolarDay firstDay = getFirstDay();
     // 今年第1周
-    SolarWeek w = SolarWeek.fromYm(getYear(), 1, 0, start.getIndex());
+    SolarWeek w = SolarWeek.fromYm(year, 1, 0, start);
     while (w.getFirstDay() != firstDay) {
       w = w.next(1);
       i++;
@@ -60,48 +38,44 @@ class SolarWeek extends AbstractTyme {
     return i;
   }
 
-  /// 起始星期
-  Week getStart() => start;
-
   @override
   String getName() => names[index];
 
   @override
-  String toString() => '$month${getName()}';
+  String toString() => '${getSolarMonth()}${getName()}';
 
   @override
   SolarWeek next(int n) {
-    int startIndex = start.getIndex();
     int d = index;
-    SolarMonth m = month;
+    SolarMonth m = getSolarMonth();
     if (n > 0) {
       d += n;
-      int weekCount = m.getWeekCount(startIndex);
+      int weekCount = m.getWeekCount(start);
       while (d >= weekCount) {
         d -= weekCount;
         m = m.next(1);
-        if (SolarDay.fromYmd(m.getYear(), m.getMonth(), 1).getWeek() != start) {
+        if (m.getFirstDay().getWeek().getIndex() != start) {
           d += 1;
         }
-        weekCount = m.getWeekCount(startIndex);
+        weekCount = m.getWeekCount(start);
       }
     } else if (n < 0) {
       d += n;
       while (d < 0) {
-        if (SolarDay.fromYmd(m.getYear(), m.getMonth(), 1).getWeek() != start) {
+        if (m.getFirstDay().getWeek().getIndex() != start) {
           d -= 1;
         }
         m = m.next(-1);
-        d += m.getWeekCount(startIndex);
+        d += m.getWeekCount(start);
       }
     }
-    return SolarWeek(m.getYear(), m.getMonth(), d, startIndex);
+    return SolarWeek(m.getYear(), m.getMonth(), d, start);
   }
 
   /// 第1天的公历日
   SolarDay getFirstDay() {
-    SolarDay firstDay = SolarDay.fromYmd(getYear(), getMonth(), 1);
-    return firstDay.next(index * 7 - indexOfSize(firstDay.getWeek().getIndex() - start.getIndex(), 7));
+    SolarDay firstDay = SolarDay(year, month, 1);
+    return firstDay.next(index * 7 - indexOfSize(firstDay.getWeek().getIndex() - start, 7));
   }
 
   /// 公历日列表

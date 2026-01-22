@@ -1,95 +1,69 @@
-import '../abstract_tyme.dart';
-import '../culture/week.dart';
+import '../unit/week_unit.dart';
 import 'lunar_day.dart';
 import 'lunar_month.dart';
 
 /// 农历周
 ///
 /// Author: 6tail
-class LunarWeek extends AbstractTyme {
+class LunarWeek extends WeekUnit {
   static const List<String> names = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"];
 
-  /// 月
-  late final LunarMonth month;
+  LunarWeek(int year, int month, int index, int start): super(year, month, index, start) {
+    validate(year, month, index, start);
+  }
 
-  /// 索引，0-5
-  final int index;
-
-  /// 起始星期
-  late final Week start;
-
-  LunarWeek(int year, int month, this.index, int start) {
-    if (index < 0 || index > 5) {
-      throw ArgumentError('illegal lunar week index: $index');
-    }
-    if (start < 0 || start > 6) {
-      throw ArgumentError('illegal lunar week start: $start');
-    }
+  static validate(int year, int month, int index, int start) {
+    WeekUnit.validate(index, start);
     LunarMonth m = LunarMonth(year, month);
     if (index >= m.getWeekCount(start)) {
       throw ArgumentError('illegal lunar week index: $index in month: $m');
     }
-    this.month = m;
-    this.start = Week.fromIndex(start);
   }
 
   LunarWeek.fromYm(int year, int month, int index, int start) : this(year, month, index, start);
 
   /// 农历月
-  LunarMonth getLunarMonth() => month;
-
-  /// 年
-  int getYear() => month.getYear();
-
-  /// 月
-  int getMonth() => month.getMonthWithLeap();
-
-  /// 索引，0-5
-  int getIndex() => index;
-
-  /// 起始星期
-  Week getStart() => start;
+  LunarMonth getLunarMonth() => LunarMonth(year, month);
 
   @override
   String getName() => names[index];
 
   @override
-  String toString() => '${month.toString()}${getName()}';
+  String toString() => '${getLunarMonth()}${getName()}';
 
   @override
   LunarWeek next(int n) {
-    int startIndex = start.getIndex();
     if (n == 0) {
-      return LunarWeek(getYear(), getMonth(), index, startIndex);
+      return LunarWeek(year, month, index, start);
     }
     int d = index + n;
-    LunarMonth m = month;
+    LunarMonth m = getLunarMonth();
     if (n > 0) {
-      int weekCount = m.getWeekCount(startIndex);
+      int weekCount = m.getWeekCount(start);
       while (d >= weekCount) {
         d -= weekCount;
         m = m.next(1);
-        if (LunarDay(m.getYear(), m.getMonthWithLeap(), 1).getWeek() != start) {
+        if (m.getFirstDay().getWeek().getIndex() != start) {
           d += 1;
         }
-        weekCount = m.getWeekCount(startIndex);
+        weekCount = m.getWeekCount(start);
       }
     } else {
       while (d < 0) {
-        if (LunarDay(m.getYear(), m.getMonthWithLeap(), 1).getWeek() != start) {
+        if (m.getFirstDay().getWeek().getIndex() != start) {
           d -= 1;
         }
         m = m.next(-1);
-        d += m.getWeekCount(startIndex);
+        d += m.getWeekCount(start);
       }
     }
-    return LunarWeek(m.getYear(), m.getMonthWithLeap(), d, startIndex);
+    return LunarWeek(m.getYear(), m.getMonthWithLeap(), d, start);
   }
 
   /// 本周第1天的农历日
   LunarDay getFirstDay() {
-    LunarDay firstDay = LunarDay(getYear(), getMonth(), 1);
-    return firstDay.next(index * 7 - indexOfSize(firstDay.getWeek().getIndex() - start.getIndex(), 7));
+    LunarDay firstDay = LunarDay(year, month, 1);
+    return firstDay.next(index * 7 - indexOfSize(firstDay.getWeek().getIndex() - start, 7));
   }
 
   /// 本周农历日列表

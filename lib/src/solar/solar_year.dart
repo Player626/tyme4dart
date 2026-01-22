@@ -1,5 +1,5 @@
-import '../abstract_tyme.dart';
 import '../rabbyung/rab_byung_year.dart';
+import '../unit/year_unit.dart';
 import 'solar_half_year.dart';
 import 'solar_month.dart';
 import 'solar_season.dart';
@@ -7,11 +7,12 @@ import 'solar_season.dart';
 /// 公历年
 ///
 /// Author: 6tail
-class SolarYear extends AbstractTyme {
-  /// 年
-  final int year;
+class SolarYear extends YearUnit {
+  SolarYear(int year): super(year) {
+    validate(year);
+  }
 
-  SolarYear(this.year) {
+  static validate(int year) {
     if (year < 1 || year > 9999) {
       throw ArgumentError('illegal solar year: $year');
     }
@@ -19,9 +20,6 @@ class SolarYear extends AbstractTyme {
 
   /// 从[year]年初始化，支持1到9999年
   SolarYear.fromYear(int year) : this(year);
-
-  /// 年
-  int getYear() => year;
 
   /// 天数（1582年355天，平年365天，闰年366天）
   int getDayCount() {

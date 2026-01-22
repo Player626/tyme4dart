@@ -15,8 +15,8 @@ void main() {
     test('test2 - 第一周的第一天', () {
       var week = LunarWeek.fromYm(2023, 1, 0, 2);
       var firstDay = week.getFirstDay();
-      expect(firstDay.month.year.getYear(), 2022); // 第一周可能从上个月开始
-      expect(firstDay.month.getMonth(), 12);
+      expect(firstDay.getYear(), 2022); // 第一周可能从上个月开始
+      expect(firstDay.getMonth(), 12);
       expect(firstDay.getDay(), 26);
     });
 
@@ -58,18 +58,18 @@ void main() {
 
     test('test10 - 获取月份', () {
       var week = LunarWeek.fromYm(2023, 1, 0, 0);
-      expect(week.month.getMonth(), 1);
-      expect(week.month.year.getYear(), 2023);
+      expect(week.getMonth(), 1);
+      expect(week.getYear(), 2023);
     });
 
     test('test11 - 获取起始星期', () {
       var week = LunarWeek.fromYm(2023, 1, 0, 0);
-      expect(week.start.getIndex(), 0); // 周日开始
+      expect(week.start, 0); // 周日开始
     });
 
     test('test12 - 周一开始', () {
       var week = LunarWeek.fromYm(2023, 1, 0, 1);
-      expect(week.start.getIndex(), 1);
+      expect(week.start, 1);
     });
 
     test('test13 - 获取所有天', () {
@@ -89,7 +89,7 @@ void main() {
     test('test15 - 跨年推移', () {
       var week = LunarWeek.fromYm(2023, 12, 3, 0); // 十二月第四周
       var next = week.next(2);
-      expect(next.month.year.getYear(), greaterThanOrEqualTo(2023));
+      expect(next.getYear(), greaterThanOrEqualTo(2023));
     });
   });
 }

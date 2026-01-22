@@ -8,9 +8,6 @@ import '../culture/star/nine/nine_star.dart';
 import '../culture/star/twelve/twelve_star.dart';
 import '../culture/star/twentyeight/twenty_eight_star.dart';
 import '../culture/taboo.dart';
-import '../lunar/lunar_day.dart';
-import '../lunar/lunar_month.dart';
-import '../lunar/lunar_year.dart';
 import '../solar/solar_day.dart';
 import '../solar/solar_term.dart';
 import '../solar/solar_time.dart';
@@ -36,25 +33,17 @@ class SixtyCycleDay extends AbstractTyme {
   SixtyCycleDay(this.solarDay, this.month, this.day);
 
   static SixtyCycleDay fromSolarDay(SolarDay solarDay) {
-    int solarYear = solarDay.getYear();
-    SolarDay springSolarDay = SolarTerm(solarYear, 3).getSolarDay();
-    LunarDay lunarDay = solarDay.getLunarDay();
-    LunarYear lunarYear = lunarDay.getLunarMonth().getLunarYear();
-    if (lunarYear.getYear() == solarYear) {
-      if (solarDay.isBefore(springSolarDay)) {
-        lunarYear = lunarYear.next(-1);
-      }
-    } else if (lunarYear.getYear() < solarYear) {
-      if (!solarDay.isBefore(springSolarDay)) {
-        lunarYear = lunarYear.next(1);
-      }
-    }
     SolarTerm term = solarDay.getTerm();
-    int index = term.getIndex() - 3;
-    if (index < 0 && term.getSolarDay().isAfter(springSolarDay)) {
-      index += 24;
+    int index = term.getIndex();
+    int offset = -1;
+    if (index < 3) {
+      if (index == 0) {
+        offset = -2;
+      }
+    } else {
+      offset = (index - 3) ~/ 2;
     }
-    return SixtyCycleDay(solarDay, SixtyCycleMonth(SixtyCycleYear(lunarYear.getYear()), LunarMonth(solarYear, 1).getSixtyCycle().next((index * 0.5).floor())), lunarDay.getSixtyCycle());
+    return SixtyCycleDay(solarDay, SixtyCycleYear(term.getYear()).getFirstMonth().next(offset), SixtyCycle(solarDay.subtract(SolarDay.fromYmd(2000, 1, 7))));
   }
 
   /// 公历日

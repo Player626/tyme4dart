@@ -10,7 +10,7 @@ abstract class WeekUnit extends MonthUnit {
   /// 起始星期，1234560分别代表星期一至星期天
   final int start;
 
-  WeekUnit(int year, int month, this.index, this.start) : super(year, month);
+  WeekUnit(super.year, super.month, this.index, this.start);
 
   /// 索引，0-5
   int getIndex() => index;
@@ -18,7 +18,7 @@ abstract class WeekUnit extends MonthUnit {
   /// 起始星期，1234560分别代表星期一至星期天
   int getStart() => start;
 
-  static validate(int index, int start) {
+  static void validate(int index, int start) {
     if (index < 0 || index > 5) {
       throw ArgumentError('illegal week index: $index');
     }

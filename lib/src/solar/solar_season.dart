@@ -15,7 +15,7 @@ class SolarSeason extends YearUnit {
     validate(year, index);
   }
 
-  static validate(int year, int index) {
+  static void validate(int year, int index) {
     if (index < 0 || index > 3) {
       throw ArgumentError('illegal solar season index: $index');
     }

@@ -3,8 +3,6 @@ import '../culture/fetus/fetus_month.dart';
 import '../culture/ren/minor_ren.dart';
 import '../culture/star/nine/nine_star.dart';
 import '../jd/julian_day.dart';
-import '../sixtycycle/earth_branch.dart';
-import '../sixtycycle/heaven_stem.dart';
 import '../sixtycycle/sixty_cycle.dart';
 import '../solar/solar_term.dart';
 import '../unit/month_unit.dart';
@@ -18,7 +16,7 @@ import 'lunar_year.dart';
 ///
 /// Author: 6tail
 class LunarMonth extends MonthUnit {
-  static const List<String> names = ["正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+  static const List<String> names = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
 
   /// 是否闰月
   late final bool leap;
@@ -28,7 +26,7 @@ class LunarMonth extends MonthUnit {
     leap = month < 0;
   }
 
-  static validate(int year, int month) {
+  static void validate(int year, int month) {
     if (month == 0 || month > 12 || month < -12) {
       throw ArgumentError('illegal lunar month: $month');
     }
@@ -48,7 +46,7 @@ class LunarMonth extends MonthUnit {
   int getMonthWithLeap() => leap ? -month : month;
 
   double getNewMoon() {
-// 冬至（与 Java 保持一致，使用本公历年的冬至）
+    // 冬至（与 Java 保持一致，使用本公历年的冬至）
     double dongZhiJd = SolarTerm(year, 0).getCursoryJulianDay();
 
     // 冬至前的初一，今年首朔的日月黄经差
@@ -79,7 +77,7 @@ class LunarMonth extends MonthUnit {
   /// 位于当年的索引(0-12)
   int getIndexInYear() {
     int index = month - 1;
-    if (isLeap()) {
+    if (leap) {
       index += 1;
     } else {
       int leapMonth = getLunarYear().getLeapMonth();
@@ -104,7 +102,7 @@ class LunarMonth extends MonthUnit {
 
   /// 名称，依据国家标准《农历的编算和颁行》GB/T 33661-2017中农历月的命名方法。
   @override
-  String getName() => (leap ? "闰" : "") + names[month - 1];
+  String getName() => (leap ? '闰' : '') + names[month - 1];
 
   @override
   String toString() => '${getLunarYear()}${getName()}';
@@ -170,7 +168,7 @@ class LunarMonth extends MonthUnit {
   }
 
   /// 干支
-  SixtyCycle getSixtyCycle() => SixtyCycle.fromName('${HeavenStem(getLunarYear().getSixtyCycle().getHeavenStem().getIndex() * 2 + month + 1).getName()}${EarthBranch(month + 1).getName()}');
+  SixtyCycle getSixtyCycle() => SixtyCycle.fromIndex(year * 12 + month - 47);
 
   /// 九星
   NineStar getNineStar() {

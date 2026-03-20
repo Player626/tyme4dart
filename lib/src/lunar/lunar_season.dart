@@ -4,7 +4,7 @@ import '../loop_tyme.dart';
 ///
 /// Author: 6tail
 class LunarSeason extends LoopTyme {
-  static const List<String> names = ["孟春", "仲春", "季春", "孟夏", "仲夏", "季夏", "孟秋", "仲秋", "季秋", "孟冬", "仲冬", "季冬"];
+  static const List<String> names = ['孟春', '仲春', '季春', '孟夏', '仲夏', '季夏', '孟秋', '仲秋', '季秋', '孟冬', '仲冬', '季冬'];
 
   LunarSeason(int index) : super(names, index);
 

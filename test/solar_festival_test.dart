@@ -23,14 +23,14 @@ void main() {
     test('test2 - 元旦推移测试', () {
       SolarFestival? f = SolarFestival.fromIndex(2023, 0);
       expect(f, isNotNull);
-      expect(f!.next(13).toString(), equals('2024年5月1日 五一劳动节'));
-      expect(f.next(-3).toString(), equals('2022年8月1日 八一建军节'));
+      expect(f!.next(13).toString(), equals('2024年5月1日 劳动节'));
+      expect(f.next(-3).toString(), equals('2022年8月1日 建军节'));
     });
 
-    test('test3 - 负向推移到三八妇女节', () {
+    test('test3 - 负向推移到妇女节', () {
       SolarFestival? f = SolarFestival.fromIndex(2023, 0);
       expect(f, isNotNull);
-      expect(f!.next(-9).toString(), equals('2022年3月8日 三八妇女节'));
+      expect(f!.next(-9).toString(), equals('2022年3月8日 妇女节'));
     });
 
     test('test4 - 从公历日获取元旦', () {
@@ -39,10 +39,10 @@ void main() {
       expect(f.toString(), equals('2010年1月1日 元旦'));
     });
 
-    test('test5 - 从公历日获取五四青年节', () {
+    test('test5 - 从公历日获取青年节', () {
       SolarFestival? f = SolarDay.fromYmd(2021, 5, 4).getFestival();
       expect(f, isNotNull);
-      expect(f.toString(), equals('2021年5月4日 五四青年节'));
+      expect(f.toString(), equals('2021年5月4日 青年节'));
     });
 
     test('test6 - 1939年5月4日无节日', () {

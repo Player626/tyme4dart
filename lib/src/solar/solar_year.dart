@@ -12,7 +12,7 @@ class SolarYear extends YearUnit {
     validate(year);
   }
 
-  static validate(int year) {
+  static void validate(int year) {
     if (year < 1 || year > 9999) {
       throw ArgumentError('illegal solar year: $year');
     }

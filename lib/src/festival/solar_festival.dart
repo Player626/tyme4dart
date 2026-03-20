@@ -6,7 +6,7 @@ import '../solar/solar_day.dart';
 ///
 /// Author: 6tail
 class SolarFestival extends AbstractTyme {
-  static const List<String> names = ['元旦', '三八妇女节', '植树节', '五一劳动节', '五四青年节', '六一儿童节', '建党节', '八一建军节', '教师节', '国庆节'];
+  static const List<String> names = ['元旦', '妇女节', '植树节', '劳动节', '青年节', '儿童节', '建党节', '建军节', '教师节', '国庆节'];
 
   static String data = '@00001011950@01003081950@02003121979@03005011950@04005041950@05006011950@06007011941@07008011933@08009101985@09010011950';
 

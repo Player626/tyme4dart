@@ -2,7 +2,6 @@ import '../abstract_tyme.dart';
 import '../culture/direction.dart';
 import '../culture/star/nine/nine_star.dart';
 import '../culture/twenty.dart';
-import 'heaven_stem.dart';
 import 'sixty_cycle.dart';
 import 'sixty_cycle_month.dart';
 
@@ -46,10 +45,7 @@ class SixtyCycleYear extends AbstractTyme {
   SixtyCycleYear next(int n) => SixtyCycleYear(year + n);
 
   /// 首月（五虎遁）
-  SixtyCycleMonth getFirstMonth() {
-    HeavenStem h = HeavenStem.fromIndex((getSixtyCycle().getHeavenStem().index + 1) * 2);
-    return SixtyCycleMonth(this, SixtyCycle.fromName('${h.getName()}寅'));
-  }
+  SixtyCycleMonth getFirstMonth() => SixtyCycleMonth(this, SixtyCycle.fromIndex(year * 12 - 46));
 
   /// 干支月列表
   List<SixtyCycleMonth> getMonths() {

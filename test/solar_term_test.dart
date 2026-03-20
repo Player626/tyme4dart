@@ -81,7 +81,7 @@ void main() {
     });
 
     test('test6 - 寒露', () {
-      expect(SolarTerm.fromName(1034, "寒露").getSolarDay().toString(), '1034年10月1日');
+      expect(SolarTerm.fromName(1034, '寒露').getSolarDay().toString(), '1034年10月1日');
       expect(SolarTerm.fromName(1034, '寒露').getJulianDay().getSolarDay().toString(), '1034年10月3日');
       expect(SolarTerm.fromName(1034, '寒露').getJulianDay().getSolarTime().toString(), '1034年10月3日 06:02:28');
     });

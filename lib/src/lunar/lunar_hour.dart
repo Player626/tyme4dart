@@ -26,7 +26,7 @@ class LunarHour extends SecondUnit {
     validate(year, month, day, hour, minute, second);
   }
 
-  static validate(int year, int month, int day, int hour, int minute, int second) {
+  static void validate(int year, int month, int day, int hour, int minute, int second) {
     SecondUnit.validate(hour, minute, second);
     LunarDay.validate(year, month, day);
   }
@@ -91,12 +91,13 @@ class LunarHour extends SecondUnit {
 
   /// 干支
   SixtyCycle getSixtyCycle() {
-    int earthBranchIndex = getIndexInDay() % 12;
-    SixtyCycle d = getLunarDay().getSixtyCycle();
+    int e = getIndexInDay();
+    HeavenStem h = getLunarDay().getSixtyCycle().getHeavenStem();
     if (hour >= 23) {
-      d = d.next(1);
+      h = h.next(1);
+      e = 0;
     }
-    return SixtyCycle.fromName('${HeavenStem(d.getHeavenStem().index % 5 * 2 + earthBranchIndex).getName()}${EarthBranch(earthBranchIndex).getName()}');
+    return SixtyCycle.fromIndex(h.getIndex() * 12 + e);
   }
 
   /// 黄道黑道十二神
@@ -108,7 +109,7 @@ class LunarHour extends SecondUnit {
     SolarDay solar = d.getSolarDay();
     SolarTerm dongZhi = SolarTerm(solar.getYear(), 0);
     int earthBranchIndex = getIndexInDay() % 12;
-    int index = [8, 5, 2][d.getSixtyCycle().getEarthBranch().index % 3];
+    int index = 8 - 3 * (d.getSixtyCycle().getEarthBranch().index % 3);
     if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
       index = 8 + earthBranchIndex - index;
     } else {

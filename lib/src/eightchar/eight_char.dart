@@ -1,5 +1,4 @@
 import '../abstract_culture.dart';
-import '../sixtycycle/earth_branch.dart';
 import '../sixtycycle/heaven_stem.dart';
 import '../sixtycycle/sixty_cycle.dart';
 import '../sixtycycle/three_pillars.dart';
@@ -35,42 +34,20 @@ class EightChar extends AbstractCulture {
   /// 胎元
   SixtyCycle getFetalOrigin() {
     SixtyCycle m = getMonth();
-    return SixtyCycle.fromName(m.getHeavenStem().next(1).getName() + m.getEarthBranch().next(3).getName());
+    return SixtyCycle.fromIndex(m.getHeavenStem().next(1).getIndex() * 6 - m.getEarthBranch().next(3).getIndex() * 5);
   }
 
   /// 胎息
   SixtyCycle getFetalBreath() {
     SixtyCycle d = getDay();
-    return SixtyCycle.fromName(d.getHeavenStem().next(5).getName() + EarthBranch.fromIndex(13 - d.getEarthBranch().getIndex()).getName());
+    return SixtyCycle.fromIndex(d.getHeavenStem().next(5).getIndex() * 6 + d.getEarthBranch().getIndex() * 5 - 65);
   }
 
   /// 命宫
-  SixtyCycle getOwnSign() {
-    int m = getMonth().getEarthBranch().getIndex() - 1;
-    if (m < 1) {
-      m += 12;
-    }
-    int h = hour.getEarthBranch().getIndex() - 1;
-    if (h < 1) {
-      h += 12;
-    }
-    int offset = m + h;
-    offset = (offset >= 14 ? 26 : 14) - offset;
-    return SixtyCycle.fromName(HeavenStem.fromIndex((getYear().getHeavenStem().getIndex() + 1) * 2 + offset - 1).getName() + EarthBranch.fromIndex(offset + 1).getName());
-  }
+  SixtyCycle getOwnSign() => SixtyCycle.fromIndex(getYear().getHeavenStem().getIndex() * 12 + (27 - getMonth().getEarthBranch().getIndex() - hour.getEarthBranch().getIndex()) % 12 + 2);
 
   /// 身宫
-  SixtyCycle getBodySign() {
-    int offset = getMonth().getEarthBranch().getIndex() - 1;
-    if (offset < 1) {
-      offset += 12;
-    }
-    offset += hour.getEarthBranch().getIndex() + 1;
-    if (offset > 12) {
-      offset -= 12;
-    }
-    return SixtyCycle.fromName(HeavenStem.fromIndex((getYear().getHeavenStem().getIndex() + 1) * 2 + offset - 1).getName() + EarthBranch.fromIndex(offset + 1).getName());
-  }
+  SixtyCycle getBodySign() => SixtyCycle.fromIndex(getYear().getHeavenStem().getIndex() * 12 + (11 + getMonth().getEarthBranch().getIndex() + hour.getEarthBranch().getIndex()) % 12 + 2);
 
   /// [startYear]开始年(含)到[endYear]结束年(含)公历时刻列表，支持1-9999年
   List<SolarTime> getSolarTimes(int startYear, int endYear) {

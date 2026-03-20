@@ -7,7 +7,7 @@ abstract class DayUnit extends MonthUnit {
   /// 日
   final int day;
 
-  DayUnit(int year, int month, this.day) : super(year, month);
+  DayUnit(super.year, super.month, this.day);
 
   /// 日
   int getDay() => day;

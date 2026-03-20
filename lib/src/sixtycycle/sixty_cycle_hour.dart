@@ -82,7 +82,7 @@ class SixtyCycleHour extends AbstractTyme {
     SolarDay solar = solarTime.getSolarDay();
     SolarTerm dongZhi = SolarTerm(solar.getYear(), 0);
     int earthBranchIndex = getIndexInDay() % 12;
-    int index = [8, 5, 2][getDay().getEarthBranch().getIndex() % 3];
+    int index = 8 - 3 * (getDay().getEarthBranch().getIndex() % 3);
     if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
       index = 8 + earthBranchIndex - index;
     } else {

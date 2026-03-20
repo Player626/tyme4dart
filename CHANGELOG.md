@@ -1,26 +1,33 @@
 # Changelog
 
 ## [1.3.8] - 2025-10-10
-1. 移植自tyme4j v1.3.8。
+1. Ported from tyme4j v1.3.8.
 
 ## [1.3.9] - 2025-10-31
-1. 新增：三柱 ThreePillars。
-2. 新增：农历日、干支日获取三柱。
-3. 新增：三柱反推公历日。
-4. 新增：节气直接获取公历日(用于日历)。
-5. 优化：干支日获取干支月与寿星万年历一致。
-6. 优化：公历日获取节气(用于日历，与寿星万年历一致)。
+1. Added: ThreePillars.
+2. Added: Get ThreePillars from LunarDay and SixtyCycleDay.
+3. Added: Get SolarDay from ThreePillars.
+4. Added: Get SolarDay from SolarTerm.
+5. Optimized: Get SixtyCycleMonth from SixtyCycleDay.
+6. Optimized: Get SolarTerm from SolarDay.
 
 ## [1.4.0] - 2025-11-05
-1. 新增：2026年法定假日。
+1. Added: 2026 legal holidays.
 
 ## [1.4.1] - 2026-01-22
-1. 修复：某些情况下月干支的错误。
-2. 修复：某些公历日获取节气错误。
-3. 修复：某些公历日转干支日错误。
-4. 移除：农历月的缓存数据。
-5. 优化：减少对象引用。
+1. Fixed: Errors in SixtyCycle of LunarMonth.
+2. Fixed: Errors in SolarTerm of SolarDay.
+3. Fixed: Errors in converting SolarDay to SixtyCycleDay.
+4. Removed: Cached data for LunarMonth.
+5. Optimized: Reduced object references.
 
 ## [1.4.2] - 2026-02-10
-1. 修复：2026-09-20的调休问题。
-2. 优化：农历传统节日的性能。
+1. Fixed: Workday adjustment issue for 2026-09-20.
+2. Optimized: Performance of LunarFestival.
+
+## [1.4.3] - 2026-03-20
+1. Fixed: Errors in isBefore/isAfter comparison for LunarDay.
+2. Refactored: Tibetan calendar.
+3. Added: Event.
+4. Optimized: Code and algorithms.
+5. Modified: Names of SolarFestival and LegalHoliday.

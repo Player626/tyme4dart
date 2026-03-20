@@ -1,8 +1,7 @@
-import 'package:tyme/src/solar/solar_day.dart';
-
 import '../abstract_tyme.dart';
 import '../enums/festival_type.dart';
 import '../lunar/lunar_day.dart';
+import '../solar/solar_day.dart';
 import '../solar/solar_term.dart';
 
 /// 农历传统节日（依据国家标准《农历的编算和颁行》GB/T 33661-2017）
@@ -82,14 +81,13 @@ class LunarFestival extends AbstractTyme {
       }
     }
 
-    if (month == 12 && day > 28) {
+    if (month.abs() == 12 && day > 28) {
       pattern = RegExp('@\\d{2}2');
       match = pattern.firstMatch(data);
       if (match == null) {
         return null;
       }
-      LunarDay nextDay = lunarDay.next(1);
-      if (nextDay.getMonth() == 1 && nextDay.getDay() == 1) {
+      if (lunarDay.next(1).getYear() != year) {
         return LunarFestival(FestivalType.EVE, lunarDay, null, match.group(0)!);
       }
     }

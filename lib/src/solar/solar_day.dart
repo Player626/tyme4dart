@@ -11,6 +11,7 @@ import '../culture/plumrain/plum_rain.dart';
 import '../culture/plumrain/plum_rain_day.dart';
 import '../culture/week.dart';
 import '../enums/hide_heaven_stem_type.dart';
+import '../evt/event.dart';
 import '../festival/solar_festival.dart';
 import '../holiday/legal_holiday.dart';
 import '../jd/julian_day.dart';
@@ -36,7 +37,7 @@ class SolarDay extends DayUnit {
     validate(year, month, day);
   }
 
-  static validate(int year, int month, int day) {
+  static void validate(int year, int month, int day) {
     if (day < 1) {
       throw ArgumentError('illegal solar day: $year-$month-$day');
     }
@@ -183,37 +184,19 @@ class SolarDay extends DayUnit {
 
   /// 三伏天
   DogDay? getDogDay() {
-    // 夏至
-    SolarTerm xiaZhi = SolarTerm(year, 12);
-    SolarDay start = xiaZhi.getSolarDay();
-    // 第3个庚日，即初伏第1天
-    start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(6) + 20);
-    int days = subtract(start);
-    // 初伏以前
-    if (days < 0) {
+    // 初伏，夏至后第3个庚日
+    SolarDay d0 = Event.builder().termHeavenStem(12, 6, 20).build().getSolarDay(year)!;
+    // 中伏，夏至后第4个庚日
+    SolarDay d1 = Event.builder().termHeavenStem(12, 6, 30).build().getSolarDay(year)!;
+    // 末伏，立秋后第1个庚日
+    SolarDay d2 = Event.builder().termHeavenStem(15, 6, 0).build().getSolarDay(year)!;
+    if (isBefore(d0) || isAfter(d2.next(9))) {
       return null;
     }
-    if (days < 10) {
-      return DogDay(Dog(0), days);
+    if (!isBefore(d2)) {
+      return DogDay(Dog.fromIndex(2), subtract(d2));
     }
-    // 第4个庚日，中伏第1天
-    start = start.next(10);
-    days = subtract(start);
-    if (days < 10) {
-      return DogDay(Dog(1), days);
-    }
-    // 第5个庚日，中伏第11天或末伏第1天
-    start = start.next(10);
-    days = subtract(start);
-    // 立秋
-    if (xiaZhi.next(3).getSolarDay().isAfter(start)) {
-      if (days < 10) {
-        return DogDay(Dog(1), days + 10);
-      }
-      start = start.next(10);
-      days = subtract(start);
-    }
-    return days >= 10 ? null : DogDay(Dog(2), days);
+    return isBefore(d1) ? DogDay(Dog.fromIndex(0), subtract(d0)) : DogDay(Dog.fromIndex(1), subtract(d1));
   }
 
   /// 数九天
@@ -232,21 +215,14 @@ class SolarDay extends DayUnit {
 
   /// 梅雨天（芒种后的第1个丙日入梅，小暑后的第1个未日出梅）
   PlumRainDay? getPlumRainDay() {
-    // 芒种
-    SolarTerm grainInEar = SolarTerm(year, 11);
-    SolarDay start = grainInEar.getSolarDay();
-    // 芒种后的第1个丙日
-    start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(2));
-
-    // 小暑
-    SolarDay end = grainInEar.next(2).getSolarDay();
-    // 小暑后的第1个未日
-    end = end.next(end.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(7));
-
+    // 入梅，芒种后第1个丙日
+    SolarDay start = Event.builder().termHeavenStem(11, 2, 0).build().getSolarDay(year)!;
+    // 出梅，小暑后第1个未日
+    SolarDay end = Event.builder().termEarthBranch(13, 7, 0).build().getSolarDay(year)!;
     if (isBefore(start) || isAfter(end)) {
       return null;
     }
-    return this == end ? PlumRainDay(PlumRain(1), 0) : PlumRainDay(PlumRain(0), subtract(start));
+    return this == end ? PlumRainDay(PlumRain.fromIndex(1), 0) : PlumRainDay(PlumRain.fromIndex(0), subtract(start));
   }
 
   /// 位于当年的索引
@@ -261,7 +237,7 @@ class SolarDay extends DayUnit {
     }
     int dayIndex = subtract(term.getSolarDay());
     int startIndex = (term.getIndex() - 1) * 3;
-    String data = "93705542220504xx1513904541632524533533105544806564xx7573304542018584xx95".substring(startIndex, startIndex + 6);
+    String data = '93705542220504xx1513904541632524533533105544806564xx7573304542018584xx95'.substring(startIndex, startIndex + 6);
     int days = 0;
     int heavenStemIndex = 0;
     int typeIndex = 0;
@@ -269,7 +245,7 @@ class SolarDay extends DayUnit {
       int i = typeIndex * 2;
       String d = data.substring(i, i + 1);
       int count = 0;
-      if (d != "x") {
+      if (d != 'x') {
         heavenStemIndex = int.parse(d);
         count = dayCounts[int.parse(data.substring(i + 1, i + 2))];
         days += count;

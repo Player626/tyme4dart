@@ -28,7 +28,7 @@ void main() {
     test('test3 - 2001年12月29日元旦节(班)', () {
       LegalHoliday? d = LegalHoliday.fromYmd(2001, 12, 29);
       expect(d, isNotNull);
-      expect(d.toString(), equals('2001年12月29日 元旦节(班)'));
+      expect(d.toString(), equals('2001年12月29日 元旦(班)'));
       expect(d!.next(-1), isNull);
     });
 

@@ -84,11 +84,16 @@ export 'src/enums/gender.dart';
 export 'src/enums/hide_heaven_stem_type.dart';
 export 'src/enums/side.dart';
 export 'src/enums/yin_yang.dart';
+export 'src/enums/event_type.dart';
 // Festival
 export 'src/festival/lunar_festival.dart';
 export 'src/festival/solar_festival.dart';
 // Holiday
 export 'src/holiday/legal_holiday.dart';
+// Event
+export 'src/evt/event.dart';
+export 'src/evt/event_builder.dart';
+export 'src/evt/event_manager.dart';
 // JulianDay
 export 'src/jd/julian_day.dart';
 // Lunar

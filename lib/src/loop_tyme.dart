@@ -46,6 +46,19 @@ abstract class LoopTyme extends AbstractTyme {
   /// 推移[n]步后的索引
   int nextIndex(int n) => indexOf(index + n);
 
-  /// 到[targetIndex]目标索引的步数
+  /// 到[targetIndex]目标索引的步数（从左往右顺序）
   int stepsTo(int targetIndex) => indexOf(targetIndex - index);
+
+  /// 到[targetIndex]目标索引的步数（从右往左逆序）
+  int stepsBackTo(int targetIndex) {
+    int n = getSize();
+    return -((index - targetIndex + n) % n);
+  }
+
+  /// 到[targetIndex]目标索引的最少步数
+  int stepsCloseTo(int targetIndex) {
+    int d1 = stepsTo(targetIndex);
+    int d2 = stepsBackTo(targetIndex);
+    return d1 <= d2.abs() ? d1 : d2;
+  }
 }

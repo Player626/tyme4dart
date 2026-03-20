@@ -1,60 +1,41 @@
-import '../abstract_tyme.dart';
-import '../culture/zodiac.dart';
 import '../solar/solar_day.dart';
-import 'rab_byung_element.dart';
+import '../unit/day_unit.dart';
 import 'rab_byung_month.dart';
 
 /// 藏历日，仅支持藏历1950年十二月初一（公历1951年1月8日）至藏历2050年十二月三十（公历2051年2月11日）
 ///
 /// Author: 6tail
-class RabByungDay extends AbstractTyme {
-  static const List<String> names = [
-    '初一', '初二', '初三', '初四', '初五',
-    '初六', '初七', '初八', '初九', '初十',
-    '十一', '十二', '十三', '十四', '十五',
-    '十六', '十七', '十八', '十九', '二十',
-    '廿一', '廿二', '廿三', '廿四', '廿五',
-    '廿六', '廿七', '廿八', '廿九', '三十'
-  ];
-
-  /// 藏历月
-  final RabByungMonth month;
-
-  /// 日
-  final int day;
+class RabByungDay extends DayUnit {
+  static const List<String> names = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
 
   /// 是否闰日
-  final bool leap;
+  late final bool leap;
 
-  RabByungDay(this.month, int day)
-      : day = day.abs(),
-        leap = day < 0 {
+  static void validate(int year, int month, int day) {
     if (day == 0 || day < -30 || day > 30) {
       throw ArgumentError('illegal day $day in $month');
     }
-    int d = this.day;
-    if (leap && !month.getLeapDays().contains(d)) {
-      throw ArgumentError('illegal leap day $d in $month');
-    } else if (!leap && month.getMissDays().contains(d)) {
-      throw ArgumentError('illegal day $d in $month');
+    RabByungMonth m = RabByungMonth.fromYm(year, month);
+    bool leap = day < 0;
+    int d = day.abs();
+    if (leap && !m.getLeapDays().contains(d)) {
+      throw ArgumentError('illegal leap day $d in $m');
+    }
+    if (!leap && m.getMissDays().contains(d)) {
+      throw ArgumentError('illegal day $d in $m');
     }
   }
 
-  /// 从藏历年月日初始化
-  RabByungDay._fromYmd(int year, int month, int day)
-      : this(RabByungMonth.fromYm(year, month), day);
+  RabByungDay(int year, int month, int day): super(year, month, day.abs()) {
+    validate(year, month, day);
+    leap = day < 0;
+  }
 
-  RabByungDay._fromElementZodiac(
-      int rabByungIndex, RabByungElement element, Zodiac zodiac, int month, int day)
-      : this(RabByungMonth.fromElementZodiac(rabByungIndex, element, zodiac, month), day);
+  /// 使用[year]藏历年、[month]藏历月(闰月为负)、[day]藏历日(闰日为负)初始化
+  RabByungDay._fromYmd(int year, int month, int day): this(year, month, day);
 
   static RabByungDay fromYmd(int year, int month, int day) {
     return RabByungDay._fromYmd(year, month, day);
-  }
-
-  static RabByungDay fromElementZodiac(
-      int rabByungIndex, RabByungElement element, Zodiac zodiac, int month, int day) {
-    return RabByungDay._fromElementZodiac(rabByungIndex, element, zodiac, month, day);
   }
 
   static RabByungDay fromSolarDay(SolarDay solarDay) {
@@ -81,20 +62,11 @@ class RabByungDay extends AbstractTyme {
         }
       }
     }
-    return RabByungDay(m, day);
+    return RabByungDay(m.getYear(), m.getMonthWithLeap(), day);
   }
 
   /// 藏历月
-  RabByungMonth getRabByungMonth() => month;
-
-  /// 年
-  int getYear() => month.getYear();
-
-  /// 月
-  int getMonth() => month.getMonthWithLeap();
-
-  /// 日
-  int getDay() => day;
+  RabByungMonth getRabByungMonth() => RabByungMonth.fromYm(year, month);
 
   /// 是否闰日
   bool isLeap() => leap;
@@ -106,7 +78,7 @@ class RabByungDay extends AbstractTyme {
   String getName() => (leap ? '闰' : '') + names[day - 1];
 
   @override
-  String toString() => month.toString() + getName();
+  String toString() => getRabByungMonth().toString() + getName();
 
   /// 藏历日相减
   int subtract(RabByungDay target) {
@@ -116,8 +88,9 @@ class RabByungDay extends AbstractTyme {
   /// 公历日
   SolarDay getSolarDay() {
     RabByungMonth m = RabByungMonth.fromYm(1950, 12);
+    RabByungMonth cm = getRabByungMonth();
     int n = 0;
-    while (month != m) {
+    while (m != cm) {
       n += m.getDayCount();
       m = m.next(1);
     }

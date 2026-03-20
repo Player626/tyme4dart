@@ -13,8 +13,6 @@ import '../culture/star/twentyeight/twenty_eight_star.dart';
 import '../culture/taboo.dart';
 import '../culture/week.dart';
 import '../festival/lunar_festival.dart';
-import '../sixtycycle/earth_branch.dart';
-import '../sixtycycle/heaven_stem.dart';
 import '../sixtycycle/sixty_cycle.dart';
 import '../sixtycycle/sixty_cycle_day.dart';
 import '../sixtycycle/three_pillars.dart';
@@ -28,14 +26,14 @@ import 'lunar_month.dart';
 ///
 /// Author: 6tail
 class LunarDay extends DayUnit {
-  static const List<String> names = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
+  static const List<String> names = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
 
   /// 使用[year]农历年、[month]农历月(闰月为负)、[day]农历日初始化
   LunarDay(int year, int month, int day): super(year, month, day) {
     validate(year, month, day);
   }
 
-  static validate(int year, int month, int day) {
+  static void validate(int year, int month, int day) {
     if (day < 1) {
       throw ArgumentError('illegal lunar day $day');
     }
@@ -66,7 +64,8 @@ class LunarDay extends DayUnit {
       return year < target.year;
     }
     if (month != target.month) {
-      return month.abs() < target.month.abs();
+      int t = target.month.abs();
+      return month == t || month.abs() < t;
     }
     return day < target.day;
   }
@@ -77,7 +76,8 @@ class LunarDay extends DayUnit {
       return year > target.year;
     }
     if (month != target.month) {
-      return month.abs() >= target.month.abs();
+      int t = month.abs();
+      return t == target.month || t > target.month.abs();
     }
     return day > target.day;
   }
@@ -86,10 +86,7 @@ class LunarDay extends DayUnit {
   Week getWeek() => getSolarDay().getWeek();
 
   /// 干支
-  SixtyCycle getSixtyCycle() {
-    int offset = getLunarMonth().getFirstJulianDay().next(day - 12).day.toInt();
-    return SixtyCycle.fromName('${HeavenStem(offset).getName()}${EarthBranch(offset).getName()}');
-  }
+  SixtyCycle getSixtyCycle() => SixtyCycle.fromIndex(getLunarMonth().getFirstJulianDay().next(day - 12).day.toInt());
 
   /// 建除十二值神
   Duty getDuty() => getSixtyCycleDay().getDuty();
@@ -100,27 +97,26 @@ class LunarDay extends DayUnit {
   /// 九星
   NineStar getNineStar() {
     SolarDay d = getSolarDay();
-    SolarTerm dongZhi = SolarTerm(d.getYear(), 0);
-    SolarDay dongZhiSolar = dongZhi.getSolarDay();
-    SolarDay xiaZhiSolar = dongZhi.next(12).getSolarDay();
-    SolarDay dongZhiSolar2 = dongZhi.next(24).getSolarDay();
-    int dongZhiIndex = dongZhiSolar.getLunarDay().getSixtyCycle().index;
-    int xiaZhiIndex = xiaZhiSolar.getLunarDay().getSixtyCycle().index;
-    int dongZhiIndex2 = dongZhiSolar2.getLunarDay().getSixtyCycle().index;
-    SolarDay solarShunBai = dongZhiSolar.next(dongZhiIndex > 29 ? 60 - dongZhiIndex : -dongZhiIndex);
-    SolarDay solarShunBai2 = dongZhiSolar2.next(dongZhiIndex2 > 29 ? 60 - dongZhiIndex2 : -dongZhiIndex2);
-    SolarDay solarNiZi = xiaZhiSolar.next(xiaZhiIndex > 29 ? 60 - xiaZhiIndex : -xiaZhiIndex);
-    int offset = 0;
-    if (!d.isBefore(solarShunBai) && d.isBefore(solarNiZi)) {
-      offset = d.subtract(solarShunBai);
-    } else if (!d.isBefore(solarNiZi) && d.isBefore(solarShunBai2)) {
-      offset = 8 - d.subtract(solarNiZi);
-    } else if (!d.isBefore(solarShunBai2)) {
-      offset = d.subtract(solarShunBai2);
-    } else if (d.isBefore(solarShunBai)) {
-      offset = 8 + solarShunBai.subtract(d);
+    int y = d.getYear();
+    SolarDay winterSolstice = SolarTerm.fromIndex(y, 0).getSolarDay();
+    SolarDay summerSolstice = SolarTerm.fromIndex(y, 12).getSolarDay();
+    SolarDay nextWinterSolstice = SolarTerm.fromIndex(y + 1, 0).getSolarDay();
+    // 距冬至最近的甲子日
+    SolarDay w = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
+    // 距夏至最近的甲子日
+    SolarDay s = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
+    // 距下个冬至最近的甲子日
+    SolarDay n = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
+    // 43210012345678876543210012345
+    //      w        s        n
+    //     冬至     夏至      冬至
+    if (d.isBefore(w)) {
+      return NineStar.fromIndex(w.subtract(d) - 1);
     }
-    return NineStar(offset);
+    if (d.isBefore(s)) {
+      return NineStar.fromIndex(d.subtract(w));
+    }
+    return NineStar.fromIndex(d.isBefore(n) ? n.subtract(d) - 1 : d.subtract(n));
   }
 
   /// 太岁方位

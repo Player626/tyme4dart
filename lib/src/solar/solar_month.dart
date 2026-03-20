@@ -17,7 +17,7 @@ class SolarMonth extends MonthUnit {
     validate(year, month);
   }
 
-  static validate(int year, int month) {
+  static void validate(int year, int month) {
     if (month < 1 || month > 12) {
       throw ArgumentError('illegal solar month: $month');
     }

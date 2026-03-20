@@ -18,7 +18,7 @@ class SolarTime extends SecondUnit {
     validate(year, month, day, hour, minute, second);
   }
 
-  static validate(int year, int month, int day, int hour, int minute, int second) {
+  static void validate(int year, int month, int day, int hour, int minute, int second) {
     SecondUnit.validate(hour, minute, second);
     SolarDay.validate(year, month, day);
   }

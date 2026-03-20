@@ -13,7 +13,7 @@ abstract class SecondUnit extends DayUnit {
   /// 秒
   final int second;
 
-  SecondUnit(int year, int month, int day, this.hour, this.minute, this.second) : super(year, month, day);
+  SecondUnit(super.year, super.month, super.day, this.hour, this.minute, this.second);
 
   /// 时
   int getHour() => hour;
@@ -24,7 +24,7 @@ abstract class SecondUnit extends DayUnit {
   /// 秒
   int getSecond() => second;
 
-  static validate(int hour, int minute, int second) {
+  static void validate(int hour, int minute, int second) {
     if (hour < 0 || hour > 23) {
       throw ArgumentError('illegal hour: $hour');
     }

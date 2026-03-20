@@ -6,13 +6,13 @@ import 'lunar_month.dart';
 ///
 /// Author: 6tail
 class LunarWeek extends WeekUnit {
-  static const List<String> names = ["第一周", "第二周", "第三周", "第四周", "第五周", "第六周"];
+  static const List<String> names = ['第一周', '第二周', '第三周', '第四周', '第五周', '第六周'];
 
   LunarWeek(int year, int month, int index, int start): super(year, month, index, start) {
     validate(year, month, index, start);
   }
 
-  static validate(int year, int month, int index, int start) {
+  static void validate(int year, int month, int index, int start) {
     WeekUnit.validate(index, start);
     LunarMonth m = LunarMonth(year, month);
     if (index >= m.getWeekCount(start)) {
@@ -33,9 +33,6 @@ class LunarWeek extends WeekUnit {
 
   @override
   LunarWeek next(int n) {
-    if (n == 0) {
-      return LunarWeek(year, month, index, start);
-    }
     int d = index + n;
     LunarMonth m = getLunarMonth();
     if (n > 0) {

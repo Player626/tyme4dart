@@ -79,13 +79,13 @@ export 'src/eightchar/provider/impl/lunar_sect1_child_limit_provider.dart';
 export 'src/eightchar/provider/impl/lunar_sect2_child_limit_provider.dart';
 export 'src/eightchar/provider/impl/lunar_sect2_eight_char_provider.dart';
 // Enums
-export 'src/enums/festival_type.dart';
 export 'src/enums/gender.dart';
 export 'src/enums/hide_heaven_stem_type.dart';
 export 'src/enums/side.dart';
 export 'src/enums/yin_yang.dart';
 export 'src/enums/event_type.dart';
 // Festival
+export 'src/festival/abstract_festival.dart';
 export 'src/festival/lunar_festival.dart';
 export 'src/festival/solar_festival.dart';
 // Holiday

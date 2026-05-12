@@ -1,3 +1,5 @@
+import 'package:tyme/src/solar/solar_day.dart';
+
 import '../abstract_culture.dart';
 import '../sixtycycle/heaven_stem.dart';
 import '../sixtycycle/sixty_cycle.dart';
@@ -83,7 +85,7 @@ class EightChar extends AbstractCulture {
       SolarTime solarTime = term.getJulianDay().getSolarTime();
       if (solarTime.getYear() >= startYear) {
         // 日干支和节令干支的偏移值
-        var solarDay = solarTime.getSolarDay();
+        SolarDay solarDay = solarTime.getSolarDay();
         int d = day.next(-solarDay.getLunarDay().getSixtyCycle().getIndex()).getIndex();
         if (d > 0) {
           // 从节令推移天数

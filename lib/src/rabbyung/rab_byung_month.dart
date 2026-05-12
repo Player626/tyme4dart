@@ -1,3 +1,4 @@
+import '../lunar/lunar_month.dart';
 import '../unit/month_unit.dart';
 import 'rab_byung_day.dart';
 import 'rab_byung_year.dart';
@@ -6,8 +7,6 @@ import 'rab_byung_year.dart';
 ///
 /// Author: 6tail
 class RabByungMonth extends MonthUnit {
-  static const List<String> names = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
-
   static const List<String> alias = ['神变月', '苦行月', '具香月', '萨嘎月', '作净月', '明净月', '具醉月', '具贤月', '天降月', '持众月', '庄严月', '满意月'];
 
   /// 是否闰月
@@ -87,7 +86,7 @@ class RabByungMonth extends MonthUnit {
   bool isLeap() => leap;
 
   @override
-  String getName() => (leap ? '闰' : '') + names[month - 1];
+  String getName() => (leap ? '闰' : '') + LunarMonth.names[month - 1];
 
   /// 别名
   String getAlias() => (leap ? '闰' : '') + alias[month - 1];

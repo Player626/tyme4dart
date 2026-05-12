@@ -4,6 +4,8 @@ import 'month_unit.dart';
 ///
 /// Author: 6tail
 abstract class WeekUnit extends MonthUnit {
+  static const List<String> names = ['第一周', '第二周', '第三周', '第四周', '第五周', '第六周'];
+
   /// 索引，0-5
   final int index;
 

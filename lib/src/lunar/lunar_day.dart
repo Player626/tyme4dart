@@ -17,7 +17,6 @@ import '../sixtycycle/sixty_cycle.dart';
 import '../sixtycycle/sixty_cycle_day.dart';
 import '../sixtycycle/three_pillars.dart';
 import '../solar/solar_day.dart';
-import '../solar/solar_term.dart';
 import '../unit/day_unit.dart';
 import 'lunar_hour.dart';
 import 'lunar_month.dart';
@@ -95,29 +94,7 @@ class LunarDay extends DayUnit {
   TwelveStar getTwelveStar() => getSixtyCycleDay().getTwelveStar();
 
   /// 九星
-  NineStar getNineStar() {
-    SolarDay d = getSolarDay();
-    int y = d.getYear();
-    SolarDay winterSolstice = SolarTerm.fromIndex(y, 0).getSolarDay();
-    SolarDay summerSolstice = SolarTerm.fromIndex(y, 12).getSolarDay();
-    SolarDay nextWinterSolstice = SolarTerm.fromIndex(y + 1, 0).getSolarDay();
-    // 距冬至最近的甲子日
-    SolarDay w = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
-    // 距夏至最近的甲子日
-    SolarDay s = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
-    // 距下个冬至最近的甲子日
-    SolarDay n = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
-    // 43210012345678876543210012345
-    //      w        s        n
-    //     冬至     夏至      冬至
-    if (d.isBefore(w)) {
-      return NineStar.fromIndex(w.subtract(d) - 1);
-    }
-    if (d.isBefore(s)) {
-      return NineStar.fromIndex(d.subtract(w));
-    }
-    return NineStar.fromIndex(d.isBefore(n) ? n.subtract(d) - 1 : d.subtract(n));
-  }
+  NineStar getNineStar() => getSolarDay().getNineStar();
 
   /// 太岁方位
   Direction getJupiterDirection() {

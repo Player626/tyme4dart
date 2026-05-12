@@ -5,7 +5,7 @@ Tyme是一个非常强大的日历工具库，可以看作 [Lunar](https://6tail
 ## 示例
 
     dependencies:
-      tyme4dart: ^1.4.3
+      tyme4dart: ^1.4.4
      
     import 'package:tyme/tyme.dart';
      

@@ -36,13 +36,27 @@ class Event extends AbstractCulture {
   @override
   String getName() => name;
 
+  int _getCharIndex(int index) => EventManager.chars.indexOf(data[index]);
+
+  int getValue(int index) => _getCharIndex(index) - 31;
+
+  List<int> getMonth(int year) {
+    int y = year;
+    int m = getValue(2);
+    if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+    return [y, m];
+  }
+
   EventType? getType() => EventType.fromCode(EventManager.chars.indexOf(data[1]));
 
   int getStartYear() {
     int n = 0;
     int size = EventManager.chars.length;
     for (int i = 0; i < 3; i++) {
-      n = n * size + EventManager.chars.indexOf(data[6 + i]);
+      n = n * size + _getCharIndex(6 + i);
     }
     return n;
   }
@@ -99,79 +113,71 @@ class Event extends AbstractCulture {
     if (d == null) {
       return null;
     }
-    int offset = EventManager.chars.indexOf(data[5]) - 31;
+    int offset = getValue(5);
     return offset == 0 ? d : d.next(offset);
   }
 
   SolarDay? _getSolarDayBySolarDay(int year) {
-    int y = year;
-    int m = EventManager.chars.indexOf(data[2]) - 31;
-    if (m > 12) {
-      m = 1;
-      y += 1;
-    }
-    int d = EventManager.chars.indexOf(data[3]) - 31;
-    int delay = EventManager.chars.indexOf(data[4]) - 31;
-    SolarMonth month = SolarMonth.fromYm(y, m);
-    int lastDay = month.getDayCount();
+    List<int> month = getMonth(year);
+    int y = month[0];
+    int m = month[1];
+    int d = getValue(3);
+    int delay = getValue(4);
+    int lastDay = SolarMonth(y, m).getDayCount();
     if (d > lastDay) {
       if (delay == 0) {
         return null;
       }
-      return delay < 0 ? SolarDay.fromYmd(y, m, d + delay) : SolarDay.fromYmd(y, m, lastDay).next(delay);
+      return delay < 0 ? SolarDay(y, m, d + delay) : SolarDay(y, m, lastDay).next(delay);
     }
-    return SolarDay.fromYmd(y, m, d);
+    return SolarDay(y, m, d);
   }
 
   SolarDay? _getSolarDayByLunarDay(int year) {
-    int y = year;
-    int m = EventManager.chars.indexOf(data[2]) - 31;
-    if (m > 12) {
-      m = 1;
-      y += 1;
-    }
-    int d = EventManager.chars.indexOf(data[3]) - 31;
-    int delay = EventManager.chars.indexOf(data[4]) - 31;
-    LunarMonth month = LunarMonth.fromYm(y, m);
-    int lastDay = month.getDayCount();
+    List<int> month = getMonth(year);
+    int y = month[0];
+    int m = month[1];
+    int d = getValue(3);
+    int delay = getValue(4);
+    int lastDay = LunarMonth(y, m).getDayCount();
     if (d > lastDay) {
       if (delay == 0) {
         return null;
       }
-      return delay < 0 ? LunarDay.fromYmd(y, m, d + delay).getSolarDay() : LunarDay.fromYmd(y, m, lastDay).getSolarDay().next(delay);
+      return delay < 0 ? LunarDay(y, m, d + delay).getSolarDay() : LunarDay(y, m, lastDay).getSolarDay().next(delay);
     }
-    return LunarDay.fromYmd(y, m, d).getSolarDay();
+    return LunarDay(y, m, d).getSolarDay();
   }
 
   SolarDay? _getSolarDayByWeek(int year) {
-    int n = EventManager.chars.indexOf(data[3]) - 31;
+    int n = getValue(3);
     if (n == 0) {
       return null;
     }
-    SolarMonth m = SolarMonth.fromYm(year, EventManager.chars.indexOf(data[2]) - 31);
-    int w = EventManager.chars.indexOf(data[4]) - 31;
+    SolarMonth m = SolarMonth(year, getValue(2));
+    int w = getValue(4);
     if (n > 0) {
       SolarDay d = m.getFirstDay();
       return d.next(d.getWeek().stepsTo(w) + 7 * n - 7);
     } else {
-      SolarDay d = SolarDay.fromYmd(year, m.month, m.getDayCount());
+      SolarDay d = SolarDay(year, m.month, m.getDayCount());
       return d.next(d.getWeek().stepsBackTo(w) + 7 * n + 7);
     }
   }
 
   SolarDay? _getSolarDayByTerm(int year) {
-    int offset = EventManager.chars.indexOf(data[4]) - 31;
-    SolarDay d = SolarTerm.fromIndex(year, EventManager.chars.indexOf(data[2]) - 31).getSolarDay();
+    SolarDay d = SolarTerm(year, getValue(2)).getSolarDay();
+    int offset = getValue(4);
     return offset == 0 ? d : d.next(offset);
   }
 
   SolarDay? _getSolarDayByTermHeavenStem(int year) {
     SolarDay d = _getSolarDayByTerm(year)!;
-    return d.next(d.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(EventManager.chars.indexOf(data[3]) - 31));
+    return d.next(d.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(getValue(3)));
   }
 
   SolarDay? _getSolarDayByTermEarthBranch(int year) {
     SolarDay d = _getSolarDayByTerm(year)!;
-    return d.next(d.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(EventManager.chars.indexOf(data[3]) - 31));
+    return d.next(d.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(getValue(3)));
   }
 }

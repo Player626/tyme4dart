@@ -9,6 +9,7 @@ import '../culture/phenology/phenology.dart';
 import '../culture/phenology/phenology_day.dart';
 import '../culture/plumrain/plum_rain.dart';
 import '../culture/plumrain/plum_rain_day.dart';
+import '../culture/star/nine/nine_star.dart';
 import '../culture/week.dart';
 import '../enums/hide_heaven_stem_type.dart';
 import '../evt/event.dart';
@@ -257,5 +258,28 @@ class SolarDay extends DayUnit {
       typeIndex++;
     }
     return HideHeavenStemDay(HideHeavenStem.fromIndex(heavenStemIndex, HideHeavenStemType.fromCode(typeIndex)!), dayIndex);
+  }
+
+  /// 九星
+  NineStar getNineStar() {
+    SolarDay winterSolstice = SolarTerm.fromIndex(year, 0).getSolarDay();
+    SolarDay summerSolstice = SolarTerm.fromIndex(year, 12).getSolarDay();
+    SolarDay nextWinterSolstice = SolarTerm.fromIndex(year + 1, 0).getSolarDay();
+    // 距冬至最近的甲子日
+    SolarDay w = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
+    // 距夏至最近的甲子日
+    SolarDay s = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
+    // 距下个冬至最近的甲子日
+    SolarDay n = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
+    // 43210012345678876543210012345
+    //      w        s        n
+    //     冬至     夏至      冬至
+    if (isBefore(w)) {
+      return NineStar.fromIndex(w.subtract(this) - 1);
+    }
+    if (isBefore(s)) {
+      return NineStar.fromIndex(subtract(w));
+    }
+    return NineStar.fromIndex(isBefore(n) ? n.subtract(this) - 1 : subtract(n));
   }
 }

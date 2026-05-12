@@ -15,16 +15,16 @@ class EventBuilder {
     return this;
   }
 
-  static String encodeType(EventType type) {
-    return EventManager.chars[type.code];
+  static String _getChar(int index) => EventManager.chars[index];
+
+  EventBuilder _setValue(int index, int n) {
+    data[index] = _getChar(31 + n);
+    return this;
   }
 
   EventBuilder _content(EventType type, int a, int b, int c) {
-    data[1] = encodeType(type);
-    data[2] = EventManager.chars[31 + a];
-    data[3] = EventManager.chars[31 + b];
-    data[4] = EventManager.chars[31 + c];
-    return this;
+    data[1] = _getChar(type.code);
+    return _setValue(2, a)._setValue(3, b)._setValue(4, c);
   }
 
   /// 公历[solarMonth]月（1至12）[solarDay]日（1至31），[delayDays]为顺延天数，例如生日在2月29，非闰年没有2月29，是+1天，还是-1天（最远支持-31至31天）
@@ -62,17 +62,14 @@ class EventBuilder {
     int size = EventManager.chars.length;
     int n = year;
     for (int i = 0; i < 3; i++) {
-      data[8 - i] = EventManager.chars[n % size];
+      data[8 - i] = _getChar(n % size);
       n ~/= size;
     }
     return this;
   }
 
   /// 偏移[days]天（最远支持-31至31天）
-  EventBuilder offset(int days) {
-    data[5] = EventManager.chars[31 + days];
-    return this;
-  }
+  EventBuilder offset(int days) => _setValue(5, days);
 
   /// 生成事件
   Event build() {

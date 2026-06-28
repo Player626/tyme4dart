@@ -15,10 +15,12 @@ abstract class AbstractCulture implements Culture {
 
   /// 将[index]索引转换为不超[size]范围的索引
   int indexOfSize(int index, int size) {
-    int i = index % size;
-    if (i < 0) {
-      i += size;
+    return index % size;
+  }
+
+  static void validateRange(int value, int min, int max, String field) {
+    if (value < min || value > max) {
+      throw ArgumentError('illegal $field: $value');
     }
-    return i;
   }
 }

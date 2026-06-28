@@ -108,6 +108,10 @@ export 'src/rabbyung/rab_byung_day.dart';
 export 'src/rabbyung/rab_byung_element.dart';
 export 'src/rabbyung/rab_byung_month.dart';
 export 'src/rabbyung/rab_byung_year.dart';
+// Hijri
+export 'src/hijri/hijri_day.dart';
+export 'src/hijri/hijri_month.dart';
+export 'src/hijri/hijri_year.dart';
 // SixtyCycle
 export 'src/sixtycycle/earth_branch.dart';
 export 'src/sixtycycle/heaven_stem.dart';

@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import '../abstract_tyme.dart';
 import '../culture/element.dart';
 import '../culture/zodiac.dart';
@@ -20,9 +21,7 @@ class RabByungYear extends AbstractTyme {
   final int zodiacIndex;
 
   static void validate(int year) {
-    if (year < 1027 || year > 9999) {
-      throw ArgumentError('illegal rab-byung year: $year');
-    }
+    AbstractCulture.validateRange(year, 1027, 9999, 'rab-byung year');
   }
 
   RabByungYear(this.rabByungIndex, this.elementIndex, this.zodiacIndex) {

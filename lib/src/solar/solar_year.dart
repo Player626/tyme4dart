@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import '../rabbyung/rab_byung_year.dart';
 import '../unit/year_unit.dart';
 import 'solar_half_year.dart';
@@ -13,9 +14,7 @@ class SolarYear extends YearUnit {
   }
 
   static void validate(int year) {
-    if (year < 1 || year > 9999) {
-      throw ArgumentError('illegal solar year: $year');
-    }
+    AbstractCulture.validateRange(year, 1, 9999, 'solar year');
   }
 
   /// 从[year]年初始化，支持1到9999年

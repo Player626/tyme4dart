@@ -14,6 +14,7 @@ import '../culture/week.dart';
 import '../enums/hide_heaven_stem_type.dart';
 import '../evt/event.dart';
 import '../festival/solar_festival.dart';
+import '../hijri/hijri_day.dart';
 import '../holiday/legal_holiday.dart';
 import '../jd/julian_day.dart';
 import '../lunar/lunar_day.dart';
@@ -39,14 +40,15 @@ class SolarDay extends DayUnit {
   }
 
   static void validate(int year, int month, int day) {
-    if (day < 1) {
-      throw ArgumentError('illegal solar day: $year-$month-$day');
-    }
-    if (1582 == year && 10 == month) {
-      if ((day > 4 && day < 15) || day > 31) {
-        throw ArgumentError('illegal solar day: $year-$month-$day');
+    bool illegal = day < 1;
+    if (!illegal) {
+      if (year == 1582 && month == 10) {
+        illegal = (day > 4 && day < 15) || day > 31;
+      } else {
+        illegal = day > SolarMonth.fromYm(year, month).getDayCount();
       }
-    } else if (day > SolarMonth.fromYm(year, month).getDayCount()) {
+    }
+    if (illegal) {
       throw ArgumentError('illegal solar day: $year-$month-$day');
     }
   }
@@ -73,8 +75,9 @@ class SolarDay extends DayUnit {
 
   /// 星座
   Constellation getConstellation() {
-    int y = month * 100 + day;
-    return Constellation(y > 1221 || y < 120 ? 9 : y < 219 ? 10 : y < 321 ? 11 : y < 420 ? 0 : y < 521 ? 1 : y < 622 ? 2 : y < 723 ? 3 : y < 823 ? 4 : y < 923 ? 5 : y < 1024 ? 6 : y < 1123 ? 7 : 8);
+    int m = month - 1;
+    int offset = day > [19, 18, 20, 19, 20, 21, 22, 22, 22, 23, 22, 21][m] ? 1 : 0;
+    return Constellation(9 + m + offset);
   }
 
   /// 节气
@@ -113,20 +116,10 @@ class SolarDay extends DayUnit {
   Phenology getPhenology() => getPhenologyDay().getPhenology();
 
   /// 是否在[target]指定公历日之前
-  bool isBefore(SolarDay target) {
-    if (year != target.year) {
-      return year < target.year;
-    }
-    return month != target.month ? month < target.month : day < target.day;
-  }
+  bool isBefore(SolarDay target) => getCompareIndex() < target.getCompareIndex();
 
   /// 是否在[target]指定公历日之后
-  bool isAfter(SolarDay target) {
-    if (year != target.year) {
-      return year > target.year;
-    }
-    return month != target.month ? month > target.month : day > target.day;
-  }
+  bool isAfter(SolarDay target) => getCompareIndex() > target.getCompareIndex();
 
   /// 以[start]为起始的公历周，1234560分别代表星期一至星期天
   SolarWeek getSolarWeek(int start) {
@@ -227,7 +220,7 @@ class SolarDay extends DayUnit {
   }
 
   /// 位于当年的索引
-  int getIndexInYear() => subtract(SolarDay(getYear(), 1, 1));
+  int getIndexInYear() => subtract(SolarDay(year, 1, 1));
 
   /// 人元司令分野
   HideHeavenStemDay getHideHeavenStemDay() {
@@ -281,5 +274,17 @@ class SolarDay extends DayUnit {
       return NineStar.fromIndex(subtract(w));
     }
     return NineStar.fromIndex(isBefore(n) ? n.subtract(this) - 1 : subtract(n));
+  }
+
+  /// 回历日
+  HijriDay getHijriDay() {
+    int d = subtract(SolarDay(622, 7, 16));
+    int z = (d / 10631).floor();
+    d -= z * 10631;
+    int y = ((d + 0.5) / 354.366).floor();
+    d -= (y * 354.366 + 0.5).floor();
+    int m = ((d + 0.11) / 29.51).floor();
+    d -= (m * 29.5 + 0.5).floor();
+    return HijriDay(z * 30 + y + 1, m + 1, d + 1);
   }
 }

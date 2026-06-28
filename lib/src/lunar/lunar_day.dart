@@ -58,28 +58,10 @@ class LunarDay extends DayUnit {
   LunarDay next(int n) => getSolarDay().next(n).getLunarDay();
 
   /// 是否在[target]指定农历日之前
-  bool isBefore(LunarDay target) {
-    if (year != target.year) {
-      return year < target.year;
-    }
-    if (month != target.month) {
-      int t = target.month.abs();
-      return month == t || month.abs() < t;
-    }
-    return day < target.day;
-  }
+  bool isBefore(LunarDay target) => getCompareIndex() < target.getCompareIndex();
 
   /// 是否在[target]指定农历日之后
-  bool isAfter(LunarDay target) {
-    if (year != target.year) {
-      return year > target.year;
-    }
-    if (month != target.month) {
-      int t = month.abs();
-      return t == target.month || t > target.month.abs();
-    }
-    return day > target.day;
-  }
+  bool isAfter(LunarDay target) => getCompareIndex() > target.getCompareIndex();
 
   /// 星期
   Week getWeek() => getSolarDay().getWeek();

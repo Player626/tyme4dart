@@ -38,3 +38,7 @@
 3. Optimized: SolarWeek and LunarWeek share the same name. 
 4. Optimized: RabByungMonth uses the name of LunarMonth. 
 5. Optimized: RabByungElement use separate names.
+
+## [1.5.0] - 2026-06-28
+1. Added：Hijri calendar。
+2. Optimized：Code and algorithms.

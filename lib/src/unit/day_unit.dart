@@ -11,4 +11,7 @@ abstract class DayUnit extends MonthUnit {
 
   /// 日
   int getDay() => day;
+
+  @override
+  int getCompareIndex() => super.getCompareIndex() + day;
 }

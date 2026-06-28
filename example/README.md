@@ -14,4 +14,7 @@
        
       // 第十七饶迥火虎年四月廿一
       print(solarDay.getRabByungDay());
+       
+      // 1406年赖买丹月20日
+      print(solarDay.getHijriDay());
     }

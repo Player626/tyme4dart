@@ -6799,30 +6799,37 @@ class ShouXingUtil {
     return t * 36525 + oneThird;
   }
 
-  static double calcShuo(double jd) {
-    int size = shuoKb.length;
+  static double qiShuo(bool isQi, bool isHigh, double jd, int pc) {
+    // 2451259是1999.3.21，太阳视黄经为0，春分；2451551是2000.1.7的那个朔日，黄经差为0
+    double w = isQi ? ((jd + pc - 2451259) / 365.2422 * 24).floorToDouble() * math.pi / 12 : ((jd + pc - 2451551) / 29.5306).floorToDouble() * pi2;
+    double d = isQi ? (isHigh ? qiHigh(w) : qiLow(w)) : isHigh ? shuoHigh(w) : shuoLow(w);
+    return (d + 0.5).floorToDouble();
+  }
+
+  static double calc(bool isQi, double jd, List<double> kb, int pc, String fkb) {
+    int size = kb.length;
     double d = 0;
-    int pc = 14, i;
-    jd += JulianDay.j2000;
-    double f1 = shuoKb[0] - pc, f2 = shuoKb[size - 1] - pc, f3 = 2436935;
-    if (jd < f1 || jd >= f3) {
-      d = (shuoHigh(((jd + pc - 2451551) / 29.5306).floorToDouble() * pi2) + 0.5).floorToDouble();
-    } else if (jd >= f1 && jd < f2) {
+    double j = jd + JulianDay.j2000;
+    double f1 = kb[0] - pc;
+    double f2 = kb[size - 1] - pc;
+    if (j < f1 || j >= 2436935) {
+      d = qiShuo(isQi, true, j, pc);
+    } else if (j >= f1 && j < f2) {
+      int i;
       for (i = 0; i < size; i += 2) {
-        if (jd + pc < shuoKb[i + 2]) {
+        if (j + pc < kb[i + 2]) {
           break;
         }
       }
-      d = shuoKb[i] + shuoKb[i + 1] * ((jd + pc - shuoKb[i]) / shuoKb[i + 1]).floorToDouble();
-      d = (d + 0.5).floorToDouble();
-      if (d == 1683460) {
-        d++;
+      d = (kb[i] + kb[i + 1] * ((j + pc - kb[i]) / kb[i + 1]).floorToDouble() + 0.5).floorToDouble();
+      if (!isQi && d == 1683460) {
+        d += 1;
       }
       d -= JulianDay.j2000;
-    } else if (jd >= f2 && jd < f3) {
-      d = (shuoLow(((jd + pc - 2451551) / 29.5306).floorToDouble() * pi2) + 0.5).floorToDouble();
-      int from = ((jd - f2) / 29.5306).floor();
-      String n = sb.substring(from, from + 1);
+    } else if (j >= f2) {
+      d = qiShuo(isQi, false, j, pc);
+      int from = isQi ? ((j - f2) / 365.2422 * 24).floor() : ((j - f2) / 29.5306).floor();
+      String n = fkb.substring(from, from + 1);
       if ('1' == n) {
         d += 1;
       } else if ('2' == n) {
@@ -6832,38 +6839,9 @@ class ShouXingUtil {
     return d;
   }
 
-  static double calcQi(double jd) {
-    int size = qiKb.length;
-    double d = 0;
-    int pc = 7, i;
-    jd += JulianDay.j2000;
-    double f1 = qiKb[0] - pc, f2 = qiKb[size - 1] - pc, f3 = 2436935;
-    if (jd < f1 || jd >= f3) {
-      d = (qiHigh(((jd + pc - 2451259) / 365.2422 * 24).floorToDouble() * math.pi / 12) + 0.5).floorToDouble();
-    } else if (jd >= f1 && jd < f2) {
-      for (i = 0; i < size; i += 2) {
-        if (jd + pc < qiKb[i + 2]) {
-          break;
-        }
-      }
-      d = qiKb[i] + qiKb[i + 1] * ((jd + pc - qiKb[i]) / qiKb[i + 1]).floorToDouble();
-      d = (d + 0.5).floorToDouble();
-      if (d == 1683460) {
-        d++;
-      }
-      d -= JulianDay.j2000;
-    } else if (jd >= f2 && jd < f3) {
-      d = (qiLow(((jd + pc - 2451259) / 365.2422 * 24).floorToDouble() * math.pi / 12) + 0.5).floorToDouble();
-      int from = ((jd - f2) / 365.2422 * 24).floor();
-      String n = qb.substring(from, from + 1);
-      if ('1' == n) {
-        d += 1;
-      } else if ('2' == n) {
-        d -= 1;
-      }
-    }
-    return d;
-  }
+  static double calcShuo(double jd) => calc(false, jd, shuoKb, 14, sb);
+
+  static double calcQi(double jd) => calc(true, jd, qiKb, 7, qb);
 
   static double qiAccurate(double w) {
     double t = saLonT(w) * 36525;

@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import '../unit/month_unit.dart';
 import 'solar_day.dart';
 import 'solar_season.dart';
@@ -18,9 +19,7 @@ class SolarMonth extends MonthUnit {
   }
 
   static void validate(int year, int month) {
-    if (month < 1 || month > 12) {
-      throw ArgumentError('illegal solar month: $month');
-    }
+    AbstractCulture.validateRange(month, 1, 12, 'solar month');
     SolarYear.validate(year);
   }
 

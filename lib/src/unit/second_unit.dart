@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import 'day_unit.dart';
 
 /// 秒
@@ -24,15 +25,15 @@ abstract class SecondUnit extends DayUnit {
   /// 秒
   int getSecond() => second;
 
+  /// 当天秒数
+  int getSecondsInDay() => hour * 3600 + minute * 60 + second;
+
+  @override
+  int getCompareIndex() => super.getCompareIndex() * 86400 + getSecondsInDay();
+
   static void validate(int hour, int minute, int second) {
-    if (hour < 0 || hour > 23) {
-      throw ArgumentError('illegal hour: $hour');
-    }
-    if (minute < 0 || minute > 59) {
-      throw ArgumentError('illegal minute: $minute');
-    }
-    if (second < 0 || second > 59) {
-      throw ArgumentError('illegal second: $second');
-    }
+    AbstractCulture.validateRange(hour, 0, 23, 'hour');
+    AbstractCulture.validateRange(minute, 0, 59, 'minute');
+    AbstractCulture.validateRange(second, 0, 59, 'second');
   }
 }

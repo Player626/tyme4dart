@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import '../abstract_tyme.dart';
 import '../culture/direction.dart';
 import '../culture/star/nine/nine_star.dart';
@@ -13,9 +14,7 @@ class SixtyCycleYear extends AbstractTyme {
   final int year;
 
   SixtyCycleYear(this.year) {
-    if (year < -1 || year > 9999) {
-      throw ArgumentError('illegal sixty cycle year: $year');
-    }
+    AbstractCulture.validateRange(year, -1, 9999, 'sixty cycle year');
   }
 
   /// 从年初始化（支持-1到9999年）

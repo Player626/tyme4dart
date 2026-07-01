@@ -6,8 +6,6 @@ import 'solar_month.dart';
 ///
 /// Author: 6tail
 class SolarWeek extends WeekUnit {
-  static const List<String> names = ['第一周', '第二周', '第三周', '第四周', '第五周', '第六周'];
-
   SolarWeek(int year, int month, int index, int start): super(year, month, index, start) {
     validate(year, month, index, start);
   }
@@ -39,7 +37,7 @@ class SolarWeek extends WeekUnit {
   }
 
   @override
-  String getName() => names[index];
+  String getName() => WeekUnit.names[index];
 
   @override
   String toString() => '${getSolarMonth()}${getName()}';

@@ -9,9 +9,13 @@ class Element extends LoopTyme {
 
   Element(int index) : super(names, index);
 
+  Element.fromIndexOf(super.names, super.index);
+
+  Element.fromNameOf(super.names, super.name) : super.fromName();
+
   Element.fromIndex(int index) : this(index);
 
-  Element.fromName(String name) : super.fromName(names, name);
+  Element.fromName(String name) : this.fromNameOf(names, name);
 
   @override
   Element next(int n) => Element(nextIndex(n));

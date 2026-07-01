@@ -74,22 +74,7 @@ class SixtyCycleDay extends AbstractTyme {
   TwelveStar getTwelveStar() => TwelveStar(day.getEarthBranch().getIndex() + (8 - getMonth().getEarthBranch().getIndex() % 6) * 2);
 
   /// 九星
-  NineStar getNineStar() {
-    int y = solarDay.getYear();
-    SolarDay winterSolstice = SolarTerm.fromIndex(y, 0).getSolarDay();
-    SolarDay summerSolstice = SolarTerm.fromIndex(y, 12).getSolarDay();
-    SolarDay nextWinterSolstice = SolarTerm.fromIndex(y + 1, 0).getSolarDay();
-    SolarDay w = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
-    SolarDay s = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
-    SolarDay n = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0));
-    if (solarDay.isBefore(w)) {
-      return NineStar.fromIndex(w.subtract(solarDay) - 1);
-    }
-    if (solarDay.isBefore(s)) {
-      return NineStar.fromIndex(solarDay.subtract(w));
-    }
-    return NineStar.fromIndex(solarDay.isBefore(n) ? n.subtract(solarDay) - 1 : solarDay.subtract(n));
-  }
+  NineStar getNineStar() => solarDay.getNineStar();
 
   /// 太岁方位
   Direction getJupiterDirection() {

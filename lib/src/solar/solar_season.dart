@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import '../unit/year_unit.dart';
 import 'solar_month.dart';
 import 'solar_year.dart';
@@ -16,9 +17,7 @@ class SolarSeason extends YearUnit {
   }
 
   static void validate(int year, int index) {
-    if (index < 0 || index > 3) {
-      throw ArgumentError('illegal solar season index: $index');
-    }
+    AbstractCulture.validateRange(index, 0, 3, 'solar season index');
     SolarYear.validate(year);
   }
 

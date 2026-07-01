@@ -1,3 +1,4 @@
+import '../abstract_culture.dart';
 import '../culture/direction.dart';
 import '../culture/kitchen_god_steed.dart';
 import '../culture/star/nine/nine_star.dart';
@@ -19,9 +20,7 @@ class LunarYear extends YearUnit {
   }
 
   static void validate(int year) {
-    if (year < -1 || year > 9999) {
-      throw ArgumentError('illegal lunar year: $year');
-    }
+    AbstractCulture.validateRange(year, -1, 9999, 'lunar year');
   }
 
   /// 从[year]农历年初始化，支持-1到9999年

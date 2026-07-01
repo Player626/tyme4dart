@@ -11,4 +11,7 @@ abstract class MonthUnit extends YearUnit {
 
   /// 月
   int getMonth() => month;
+
+  @override
+  int getCompareIndex() => super.getCompareIndex() + (month > 0 ? month * 2 : -month * 2 + 1) * 100;
 }

@@ -11,4 +11,7 @@ abstract class YearUnit extends AbstractTyme {
 
   /// 年
   int getYear() => year;
+
+  /// 用于比较大小的索引
+  int getCompareIndex() => year * 10000;
 }

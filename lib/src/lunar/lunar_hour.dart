@@ -51,43 +51,15 @@ class LunarHour extends SecondUnit {
       return LunarHour(year, month, day, hour, minute, second);
     }
     int h = hour + n * 2;
-    int diff = h < 0 ? -1 : 1;
-    int hours = h.abs();
-    int days = hours ~/ 24 * diff;
-    hours = (hours % 24) * diff;
-    if (hours < 0) {
-      hours += 24;
-      days--;
-    }
-    LunarDay d = getLunarDay().next(days);
-    return LunarHour(d.getYear(), d.getMonth(), d.getDay(), hours, minute, second);
+    LunarDay d = getLunarDay().next((h / 24).floor());
+    return LunarHour(d.getYear(), d.getMonth(), d.getDay(), indexOfSize(h, 24), minute, second);
   }
 
   /// 是否在[target]指定农历时辰之前
-  bool isBefore(LunarHour target) {
-    LunarDay aDay = getLunarDay();
-    LunarDay bDay = target.getLunarDay();
-    if (aDay != bDay) {
-      return aDay.isBefore(bDay);
-    }
-    if (hour != target.hour) {
-      return hour < target.hour;
-    }
-    return minute != target.minute ? minute < target.minute : second < target.second;
-  }
+  bool isBefore(LunarHour target) => getCompareIndex() < target.getCompareIndex();
 
   /// 是否在[target]指定农历时辰之后
-  bool isAfter(LunarHour target) {
-    LunarDay aDay = getLunarDay();
-    LunarDay bDay = target.getLunarDay();
-    if (aDay != bDay) {
-      return aDay.isAfter(bDay);
-    }
-    if (hour != target.hour) {
-      return hour > target.hour;
-    }
-    return minute != target.minute ? minute > target.minute : second > target.second;
-  }
+  bool isAfter(LunarHour target) => getCompareIndex() > target.getCompareIndex();
 
   /// 干支
   SixtyCycle getSixtyCycle() {

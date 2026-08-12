@@ -5,7 +5,7 @@ import 'star/twentyeight/twenty_eight_star.dart';
 ///
 /// Author: 6tail
 class Animal extends LoopTyme {
-  static const List<String> names = ['蛟', '龙', '貉', '兔', '狐', '虎', '豹', '獬', '牛', '蝠', '鼠', '燕', '猪', '獝', '狼', '狗', '彘', '鸡', '乌', '猴', '猿', '犴', '羊', '獐', '马', '鹿', '蛇', '蚓'];
+  static const List<String> names = ['蛟', '龙', '貉', '兔', '狐', '虎', '豹', '獬', '牛', '蝠', '鼠', '燕', '猪', '貐', '狼', '狗', '雉', '鸡', '乌', '猴', '猿', '犴', '羊', '獐', '马', '鹿', '蛇', '蚓'];
 
   Animal(int index) : super(names, index);
 
